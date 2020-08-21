@@ -7,4 +7,4 @@ RUN apk add --no-cache python3 py3-pip\
 
 USER guest
 
-ENTRYPOINT ["python","minecraft_exporter.py"]
+ENTRYPOINT ["python3","minecraft_exporter.py"]
