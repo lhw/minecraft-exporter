@@ -1,3 +1,6 @@
+# remove python statistics from prometheus
+from prometheus_client import REGISTRY, PROCESS_COLLECTOR, PLATFORM_COLLECTOR, GC_COLLECTOR
+[REGISTRY.unregister(c) for c in [PROCESS_COLLECTOR, PLATFORM_COLLECTOR, GC_COLLECTOR]]
 from prometheus_client import start_http_server, REGISTRY, Metric
 import time
 import requests
@@ -7,15 +10,16 @@ import re
 import os
 import schedule
 from mcrcon import MCRcon
-from os import listdir
+from os import listdir, getenv
 from os.path import isfile, join
 
 class MinecraftCollector(object):
     def __init__(self):
-        self.statsdirectory = "/world/stats"
-        self.playerdirectory = "/world/playerdata"
-        self.advancementsdirectory = "/world/advancements"
-        self.betterquesting = "/world/betterquesting"
+        world = getenv('MC_WORLD_PATH', '/world')
+        self.statsdirectory = world + "/stats"
+        self.playerdirectory = world + "/playerdata"
+        self.advancementsdirectory = world + "/advancements"
+        self.betterquesting = world + "/betterquesting"
         self.map = dict()
         self.questsEnabled = False
         self.rcon = None

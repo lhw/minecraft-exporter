@@ -1,8 +1,10 @@
-FROM python:3-alpine
+FROM alpine:3.12
 
-COPY requirements.txt minecraft_exporter.py /
-RUN pip install --no-cache-dir -r requirements.txt
+COPY requirements.txt minecraft_exporter.py /app/
+WORKDIR /app
+RUN apk add --no-cache python3 py3-pip\
+    && pip3 install --no-cache-dir -r requirements.txt
 
-EXPOSE 8000
+USER guest
 
 ENTRYPOINT ["python","minecraft_exporter.py"]
